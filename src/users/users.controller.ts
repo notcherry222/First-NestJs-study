@@ -9,7 +9,9 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    const {name, email} = createUserDto;
+    return `유저를 생성했습니다 ${name}, ${email}`;
+    // return this.usersService.create(createUserDto);
   }
 
   @Get()
