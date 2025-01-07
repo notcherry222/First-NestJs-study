@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
-import { ApiController } from './api/api.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entities/user.entity';
 
 @Module({
-  imports: [UsersModule],
-  controllers: [ApiController],
+  imports: [
+    UsersModule,
+    TypeOrmModule.forRoot({
+      entities: [User]
+    })
+  ]
 })
 export class AppModule {}
