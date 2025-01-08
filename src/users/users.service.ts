@@ -6,7 +6,7 @@ import { EmailService } from 'src/email/email.service';
 import { UserInfo } from './interfaces/user-info.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User } from './entity/user.entity';
 
 @Injectable()
 export class UsersService {

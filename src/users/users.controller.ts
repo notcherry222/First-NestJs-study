@@ -1,20 +1,25 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserInfo } from './interfaces/user-info.interface';
+import { CommandBus } from '@nestjs/cqrs';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService
+    , private commandBus: CommandBus 
+  ) {}
 
   @Post()
   async createUser(@Body() dto: CreateUserDto): Promise<void> {
     const {name, email, password} = dto;
-    console.log(dto);
-    await this.usersService.createUser(name, email, password);
+    // console.log(dto);
+    // await this.usersService.createUser(name, email, password);
+    const command = new CreateUserCommand(name, email, password);
+    return this.commandBus.execute(command);
   }
 
   @Post('/email-verify')
@@ -39,10 +44,6 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
